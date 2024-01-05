@@ -1,7 +1,8 @@
 const quizBox = document.getElementById("quiz");
-const submitAnswer = document.querySelector("button");
+const button = document.querySelector("button");
 const timer = document.getElementById("timer");
-let timeLeft = 60;
+let currentQuestion = 0;
+let timeLeft = 61;
 
 const questions = [
     {
@@ -62,7 +63,9 @@ const questions = [
 function gameQuery(){
     let playGame = confirm("Do you want to play a JavaScript quiz game?");
     if (playGame) {
-        askQuestion() // run the quiz game
+        countdown();
+        askQuestion();
+         // run the quiz game
     } else {
         alert("How about you go read an article then!");
         window.location.href = "https://en.wikipedia.org/wiki/JavaScript";
@@ -73,24 +76,61 @@ function gameQuery(){
 function countdown() {
     const timeInterval = setInterval(function () {
         timeLeft--;
-        timer.textcontent = timeLeft + " seconds remaining,";
-        
+        timer.textContent = timeLeft + " seconds remaining";
+        // console.log();
         if(timeLeft === 0){
-          alert("Game over!");
-          clearInterval(timeInterval);
-          timer.textContent = " ";
+            alert("Game over!");
+            clearInterval(timeInterval);
+            timer.textContent = " ";
         }
-    },1000);
+    }, 1000);
 };
 
 //function defining the quiz
 function askQuestion() {
-    submitAnswer.textContent = "Submit";
-    timer.textContent = "timeLeft"
     quizBox.textContent = "";
-    // hidden box now shows?
-    quizBox.hidden = false;
+    let questionObject = questions[currentQuestion];
+    let question = questionObject.question;
+    let choices = questionObject.choices;
+    let answer = questionObject.answer;
+    let quesDiv = document.createElement("div");
+    quesDiv.className = "";
+
+
+    quesDiv.textContent = question;
+    quizBox.append(quesDiv);
+
+
+    // choices.forEach( => {
+    //     document.createElement("button");
+    //     options.textContent = choices;
+    //     options.className = "btn";
+    //     quizBox.append(options);
+    // })
+    function checkAnswer() {
+        let correctAns = ("");
+        if (correct) {
+            document.getElementsByClassName("btn")// change color to green
+            askQuestion(currentQuestion(value)++); //ask next question
+        } else {
+            // change color to red
+            timeLeft = (timeLeft += -5)
+        }
+    }
+
+    for (let i = 0; i < choices.length; i++) {
+        let options = document.createElement("button");
+        options.textContent = choices[i];
+        options.className = "btn";
+        quizBox.append(options);
+        options.addEventListener("click", checkAnswer);
+
+        }
+
     
+       
+    // hidden box now shows?
+    // quizBox.hidden = false;
     //pull a question/answer selection from the array
     //answer set up as multiple choice buttons
     
@@ -112,12 +152,17 @@ function askQuestion() {
     //prompt user to input name
     //form input, 
     //add name and time remaining to local storage
-    countdown();
 };
 
+//function to save the user's initials and score
 function saveAnswer(){
+    localStorage.setData();
+
 
 };
 
-submitAnswer.textContent = "Play a game?";
-submitAnswer.addEventListener("click", gameQuery);
+//display high scores on separate page
+//function to call the localstorage data
+
+button.textContent = "Play a game?";
+button.addEventListener("click", gameQuery);
